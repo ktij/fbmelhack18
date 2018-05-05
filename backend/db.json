@@ -3,14 +3,22 @@
     {
       "id": 1,
       "type": "event",
-      "message": "Come and see our Autumn Concert on May 31st!",
+      "title": "Autumn Concert 2018",
+      "messages": [
+        "Come and see our Autumn Concert on May 31st!",
+        "Don't miss us performing at the Sheraton Hotel!"
+      ],
       "event_url": "https://www.facebook.com/groups/1662261627183410/",
       "end_date": "2018-05-31"
     },
     {
       "id": 2,
       "type": "event",
-      "message": "Come and see our Spring Concert on September 31st!",
+      "title": "Spring Concert 2018",
+      "messages": [
+        "Come and see our Spring Concert on September 31st!",
+        "We'll be playing all your favourites, from Brahms to Beethover!"
+      ],
       "event_url": "https://www.facebook.com/groups/1662261627183410/",
       "end_date": "2018-09-31"
     }

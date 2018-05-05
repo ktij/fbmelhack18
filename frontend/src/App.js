@@ -1,21 +1,39 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
+import { Paper, Typography, List, ListItem, ListItemText } from 'material-ui'
+
+import { getItems } from './ducks/items'
 
 class App extends Component {
+  componentDidMount = () => {
+    this.props.getItems()
+  }
+
   render() {
+    const { items } = this.props
+    console.log(items)
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <Paper>
+          <Typography>Hello World!</Typography>
+          <List>
+            {items.payload.map((item, i) => (
+              <ListItem key={i}>
+                <ListItemText primary={item.title} />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+const mapStateToProps = ({ items }) => ({
+  items
+})
+
+const mapDispatchToProps = { getItems }
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
