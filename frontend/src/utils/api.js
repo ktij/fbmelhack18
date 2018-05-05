@@ -18,3 +18,10 @@ const callAPI = (endpoint, params) => {
 }
 
 export const getItems = () => callAPI('items', { method: 'GET' })
+
+export const updateItem = item =>
+  callAPI(`items/${item.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(item)
+  })
