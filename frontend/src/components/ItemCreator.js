@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
 
 import {
@@ -10,10 +9,14 @@ import {
   DialogContentText,
   DialogActions,
   Button,
-  TextField
+  TextField,
+  Select,
+  InputLabel,
+  FormControl,
+  MenuItem
 } from 'material-ui'
 
-import { updateItem } from '../utils/api'
+import { createItem } from '../utils/api'
 
 const styles = theme => ({
   root: {
@@ -22,21 +25,10 @@ const styles = theme => ({
 })
 
 class ItemEditor extends Component {
-  state = { item: {}, index: -1 }
+  state = { item: undefined }
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    if (nextProps.index === prevState.index) {
-      return null
-    } else {
-      return {
-        item: nextProps.items.payload[nextProps.index],
-        index: nextProps.index
-      }
-    }
-  }
-
-  handleSaveAndClose = () => {
-    updateItem(this.state.item)
+  handleCreateAndClose = async () => {
+    await createItem(this.state.item)
     this.props.onClose()
   }
 
@@ -45,12 +37,13 @@ class ItemEditor extends Component {
       item: { ...this.state.item, [attribute]: event.target.value }
     })
   }
+
   render = () => {
     const { item } = this.state
     const { open, onClose, classes } = this.props
     return (
       <Dialog open={open} onClose={onClose} classes={{ paper: classes.root }}>
-        <DialogTitle>{item ? `Edit '${item.title}'` : ''}</DialogTitle>
+        <DialogTitle>Create Item</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Update the item details and save!
@@ -58,32 +51,49 @@ class ItemEditor extends Component {
           <TextField
             label="title"
             onChange={this.handleUpdate('title')}
-            value={item ? item.title : ''}
+            value={item && item.title ? item.title : ''}
+            error={item && !item.title}
             fullWidth
+            required
           />
           <TextField
             label="message"
             onChange={this.handleUpdate('message')}
-            value={item ? item.message : ''}
+            value={item && item.message ? item.message : ''}
             fullWidth
+            required
           />
+          <FormControl>
+            <InputLabel>Type</InputLabel>
+            <Select
+              value={item && item.type ? item.type : ''}
+              onChange={this.handleUpdate('type')}
+              fullWidth
+            >
+              <MenuItem value="event">Event</MenuItem>
+              <MenuItem value="recurring">Recurring</MenuItem>
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleSaveAndClose}>Save And Close</Button>
+          <Button color="secondary" onClick={this.props.onClose}>
+            Cancel
+          </Button>
+          <Button
+            onClick={this.handleCreateAndClose}
+            disabled={!(item && item.title && item.message && item.type)}
+          >
+            Create Item
+          </Button>
         </DialogActions>
       </Dialog>
     )
   }
 }
 
-const mapStateToProps = ({ items }) => ({
-  items
-})
-
 ItemEditor.propTypes = {
-  index: PropTypes.number.isRequired,
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(ItemEditor))
+export default withStyles(styles)(ItemEditor)

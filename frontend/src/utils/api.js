@@ -25,3 +25,12 @@ export const updateItem = item =>
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(item)
   })
+
+export const createItem = item =>
+  callAPI('items', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(payload => {
+    const { id } = payload
+    updateItem({ ...item, id })
+  })
