@@ -17,6 +17,8 @@ json-server
 
 ## UTILS
 
+The database can be found under `/backend/db.json`. _Please note that it is volatile and subject to change_
+
 To install packages, please run the following pip command.
 
 ```
